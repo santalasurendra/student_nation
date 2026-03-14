@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark mb-0">Admin Dashboard</h2>
+        <div>
+            <span class="badge bg-primary px-3 py-2 rounded-pill fs-6">Welcome, {{ current_user.name }} ({{ current_user.role }})</span>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card dashboard-card bg-white p-4 h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-success bg-opacity-10 text-success me-3">
+                        <i class="bi bi-cash-stack fs-4"></i>
+                    </div>
+                    <h6 class="text-muted fw-bold text-uppercase mb-0">Total Donations</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0">₹{{ "{:,.2f}".format(total_donations) }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card dashboard-card bg-white p-4 h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="bi bi-people-fill fs-4"></i>
+                    </div>
+                    <h6 class="text-muted fw-bold text-uppercase mb-0">Students Helped</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0">{{ students_helped }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card dashboard-card bg-white p-4 h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="bi bi-hourglass-split fs-4"></i>
+                    </div>
+                    <h6 class="text-muted fw-bold text-uppercase mb-0">Pending Requests</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0">{{ pending_requests }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card dashboard-card bg-white p-4 h-100">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-box bg-info bg-opacity-10 text-info me-3">
+                        <i class="bi bi-person-hearts fs-4"></i>
+                    </div>
+                    <h6 class="text-muted fw-bold text-uppercase mb-0">Active Donors</h6>
+                </div>
+                <h3 class="fw-bold text-dark mb-0">{{ active_donors }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                    <h5 class="fw-bold text-dark">Quick Actions</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <a href="{{ url_for('admin_bp.requests_list') }}" class="btn btn-outline-primary w-100 py-3 rounded-3 text-start fw-semibold shadow-sm text-decoration-none">
+                                <i class="bi bi-file-earmark-medical me-2 fs-5"></i> Manage Requests
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="{{ url_for('admin_bp.donations_list') }}" class="btn btn-outline-success w-100 py-3 rounded-3 text-start fw-semibold shadow-sm text-decoration-none">
+                                <i class="bi bi-heart-fill me-2 fs-5"></i> View Donations
+                            </a>
+                        </div>
+                        {% if current_user.role in ['Admin', 'Founder'] %}
+                        <div class="col-sm-6">
+                            <a href="{{ url_for('admin_bp.fund_distribution') }}" class="btn btn-outline-warning w-100 py-3 rounded-3 text-start text-dark fw-semibold shadow-sm text-decoration-none">
+                                <i class="bi bi-bank me-2 fs-5"></i> Fund Distribution
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if current_user.role == 'Founder' %}
+                        <div class="col-sm-6">
+                            <a href="{{ url_for('founder_bp.team_management') }}" class="btn btn-outline-dark w-100 py-3 rounded-3 text-start fw-semibold shadow-sm text-decoration-none">
+                                <i class="bi bi-shield-lock-fill me-2 fs-5"></i> Team Management
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                    <i class="bi bi-shield-check mb-3" style="font-size: 3rem; color: var(--highlight-color);"></i>
+                    <h4 class="fw-bold mb-3">System Status</h4>
+                    <p class="opacity-75 small">All systems operational. Database connected accurately. Upload directories synchronized.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

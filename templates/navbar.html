@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark pb-3 pt-3 sticky-top custom-navbar">
+    <div class="container-fluid container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('main_bp.index') }}">
+            <i class="bi bi-shield-fill-check me-2 text-warning fs-3"></i>
+            <span class="brand-text">STUDENT NATION</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main_bp.index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main_bp.about') }}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main_bp.donate') }}">Donate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main_bp.emergency_help') }}">Emergency Help</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main_bp.top_donors') }}">Top Donors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main_bp.reports') }}">Reports</a>
+                </li>
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="{{ url_for('main_bp.contact') }}">Contact</a>
+                </li>
+
+                {% if current_user.is_authenticated %}
+                <li class="nav-item me-2 d-none d-lg-block text-white opacity-50">|</li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn btn-sm btn-outline-light rounded-pill px-3" href="#"
+                        id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i> {{ current_user.name }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('admin_bp.dashboard') }}"><i
+                                    class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                        {% if current_user.role == 'Founder' %}
+                        <li><a class="dropdown-item fw-bold text-dark" href="{{ url_for('founder_bp.dashboard') }}"><i
+                                    class="bi bi-star-fill text-warning me-2"></i>Founder Panel</a></li>
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="{{ url_for('auth_bp.logout') }}"><i
+                                    class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white custom-btn-login px-4 rounded-pill fw-semibold shadow-sm"
+                        href="{{ url_for('auth_bp.login') }}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

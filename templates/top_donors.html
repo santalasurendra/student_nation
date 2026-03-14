@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Top Donors - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-dark section-title">Hall of Angels</h2>
+        <p class="text-muted lead">Honoring the generous individuals who have stepped forward to support our students in need.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm glass-card p-4 rounded-4">
+        {% if donors %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th scope="col" class="py-3 text-uppercase text-muted small fw-bold rounded-start">Rank</th>
+                        <th scope="col" class="py-3 text-uppercase text-muted small fw-bold">Donor Name</th>
+                        <th scope="col" class="py-3 text-uppercase text-muted small fw-bold">Date</th>
+                        <th scope="col" class="py-3 text-uppercase text-muted small fw-bold text-end rounded-end">Donation Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donor in donors %}
+                    <tr>
+                        <td class="fw-bold text-muted py-3">
+                            {% if loop.index == 1 %}
+                                <i class="bi bi-trophy-fill fs-4" style="color: #fbbf24;"></i>
+                            {% elif loop.index == 2 %}
+                                <i class="bi bi-trophy-fill fs-4" style="color: #94a3b8;"></i>
+                            {% elif loop.index == 3 %}
+                                <i class="bi bi-trophy-fill fs-4" style="color: #b45309;"></i>
+                            {% else %}
+                                #{{ loop.index }}
+                            {% endif %}
+                        </td>
+                        <td class="py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-person-fill fs-5"></i>
+                                </div>
+                                <span class="fw-bold text-dark">{{ donor.donor_name }}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 text-muted small">
+                            {{ donor.date.strftime('%b %d, %Y') }}
+                        </td>
+                        <td class="text-end py-3">
+                            <span class="badge bg-success bg-opacity-10 text-success fs-6 px-3 py-2 rounded-pill fw-bold border border-success border-opacity-25">
+                                ₹{{ "{:,.2f}".format(donor.amount) }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+            <h5 class="text-muted">No donations recorded yet.</h5>
+            <p>Be the first to make a difference!</p>
+            <a href="{{ url_for('main_bp.donate') }}" class="btn btn-primary rounded-pill px-4">Donate Now</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

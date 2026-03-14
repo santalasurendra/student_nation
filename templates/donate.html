@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Donate - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark section-title">Make a Donation</h2>
+                <p class="text-muted lead">Your contribution can change a student's life. 100% of your donation goes directly to the verified student.</p>
+            </div>
+
+            <div class="row g-5">
+                <!-- QR Code Section -->
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-lg text-center h-100" style="border-radius: 20px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+                        <div class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
+                            <h4 class="fw-bold mb-4">Scan to Pay via UPI</h4>
+                            <div class="bg-white p-3 rounded-4 mb-4 d-inline-block shadow">
+                                <img src="{{ url_for('static', filename='qr/upi_qr.png') }}" alt="UPI QR Code" class="img-fluid" style="max-width: 200px; border-radius: 10px;" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=studentnation@upi&pn=Student%20Nation'">
+                            </div>
+                            <div class="mb-3">
+                                <p class="mb-1 text-light opacity-75">Or use UPI ID:</p>
+                                <div class="bg-dark bg-opacity-25 px-4 py-2 rounded-pill fw-bold fs-5 tracking-wide user-select-all cursor-pointer border border-white border-opacity-25">
+                                    studentnation@upi
+                                </div>
+                            </div>
+                            <p class="small text-light opacity-50 mt-4"><i class="bi bi-shield-check me-1"></i>Secure UPI Payment Gateway</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="col-md-7">
+                    <div class="card border-0 shadow-sm glass-card h-100">
+                        <div class="card-body p-5">
+                            <h4 class="fw-bold mb-4 text-dark"><i class="bi bi-card-heading me-2 text-primary"></i>Donation Details</h4>
+                            <form action="{{ url_for('main_bp.donate') }}" method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-muted">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-person text-muted"></i></span>
+                                        <input type="text" class="form-control border-start-0 ps-0" name="name" required placeholder="John Doe">
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-muted">Email Address</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+                                            <input type="email" class="form-control border-start-0 ps-0" name="email" required placeholder="john@example.com">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-muted">Phone Number</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-telephone text-muted"></i></span>
+                                            <input type="tel" class="form-control border-start-0 ps-0" name="phone" required placeholder="9876543210">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold text-muted">Donation Amount (₹)</label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-light text-success fw-bold border-end-0">₹</span>
+                                        <input type="number" class="form-control border-start-0 ps-0 fw-bold text-success" name="amount" required min="1" placeholder="500">
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold text-muted">UPI Transaction ID (UTR Number)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-hash text-muted"></i></span>
+                                        <input type="text" class="form-control border-start-0 ps-0" name="transaction_id" required placeholder="e.g. 123456789012">
+                                    </div>
+                                    <div class="form-text">Enter the 12-digit UPI transaction reference number.</div>
+                                </div>
+
+                                <div class="mb-4 p-4 border rounded-3 bg-light">
+                                    <label class="form-label fw-bold d-block text-dark"><i class="bi bi-cloud-arrow-up-fill me-2 text-primary"></i>Upload Payment Screenshot</label>
+                                    <p class="small text-muted mb-2">After making the payment using the QR code, please upload a screenshot of the successful transaction.</p>
+                                    <input class="form-control" type="file" name="screenshot" accept="image/*" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-5 shadow" style="background: linear-gradient(45deg, #0ea5e9, #3b82f6); border: none;">
+                                    <i class="bi bi-check2-circle me-2"></i>Submit Donation Info
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

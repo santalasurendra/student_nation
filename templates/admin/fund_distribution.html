@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Fund Distribution - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h2 class="fw-bold text-dark mb-0"><i class="bi bi-bank text-warning me-2"></i>Fund Distribution</h2>
+            <p class="text-muted mb-0">Record and track funds distributed to verified students.</p>
+        </div>
+        <a href="{{ url_for('admin_bp.dashboard') }}" class="btn btn-secondary rounded-pill fw-semibold"><i class="bi bi-arrow-left me-1"></i> Back to Dashboard</a>
+    </div>
+
+    <!-- Action Button for Modal -->
+    <div class="mb-4">
+        <button type="button" class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#addDistributionModal">
+            <i class="bi bi-plus-circle-fill me-2"></i> Record New Distribution
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5 glass-card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="py-3 text-muted fw-bold">Date Distributed</th>
+                        <th class="py-3 text-muted fw-bold">Student Name</th>
+                        <th class="py-3 text-muted fw-bold">Amount Given</th>
+                        <th class="py-3 text-muted fw-bold text-end">Approved By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dist in distributions %}
+                    <tr>
+                        <td class="py-3 text-muted small">{{ dist.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td class="py-3 fw-bold text-dark">{{ dist.student_name }}</td>
+                        <td class="py-3 fw-bold text-danger fs-5">₹{{ dist.amount_given }}</td>
+                        <td class="py-3 text-end"><span class="badge bg-primary px-3 py-2 rounded-pill">{{ dist.approved_by }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">No fund distributions recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Distribution Modal -->
+    <div class="modal fade" id="addDistributionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold">Record Fund Distribution</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="{{ url_for('admin_bp.fund_distribution') }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label text-muted fw-semibold">Student Name</label>
+                            <input type="text" class="form-control bg-light" name="student_name" required placeholder="Name of recipient">
+                            <div class="form-text small">Ensure this matches an approved request.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted fw-semibold">Amount Given (₹)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 fw-bold">₹</span>
+                                <input type="number" class="form-control bg-light border-start-0 ps-0 fw-bold text-danger" name="amount_given" required min="1">
+                            </div>
+                        </div>
+                        <p class="text-muted small border p-3 rounded bg-light mb-4 text-center">
+                            By recording this, you legally affirm that <strong>₹[Amount]</strong> has been physically/digitally transferred to <strong>[Student]</strong>. This action is permanently linked to your profile: <strong>{{ current_user.name }}</strong>.
+                        </p>
+                        <button type="submit" class="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm border-0" style="background: linear-gradient(45deg, #f59e0b, #d97706); color: white;">
+                            <i class="bi bi-save me-2"></i> Save Record Permanently
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}OTP Verification - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow-lg rounded-4 p-5 text-center" style="max-width: 480px; width: 100%;">
+
+        <!-- Icon + Heading -->
+        <div class="mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                style="width:80px;height:80px;background:linear-gradient(135deg,#10b981,#059669)">
+                <i class="bi bi-shield-lock-fill text-white" style="font-size:2.2rem;"></i>
+            </div>
+            <h3 class="fw-bold text-dark mb-1">Two-Factor Authentication</h3>
+            <p class="text-muted small mb-0">A 6-digit code was sent to your registered email. <br>
+                It expires in <strong id="expiryCountdown" class="text-danger">05:00</strong>
+            </p>
+        </div>
+
+        <!-- OTP Form -->
+        <form action="{{ url_for('auth_bp.otp_verification') }}" method="POST" autocomplete="off">
+            <div class="mb-4 text-start">
+                <label class="form-label fw-bold text-muted small">Enter 6-digit OTP</label>
+                <input
+                    type="text"
+                    name="otp"
+                    id="otpInput"
+                    class="form-control form-control-lg bg-light text-center fw-bold"
+                    style="font-size:2rem;letter-spacing:0.5rem;"
+                    required
+                    placeholder="······"
+                    maxlength="6"
+                    pattern="\d{6}"
+                    inputmode="numeric"
+                    autofocus>
+            </div>
+            <button type="submit" class="btn w-100 py-3 rounded-pill fw-bold fs-5 shadow-sm mb-3"
+                style="background:linear-gradient(45deg,#10b981,#059669);border:none;color:white;">
+                <i class="bi bi-check2-circle me-2"></i> Verify & Login
+            </button>
+        </form>
+
+        <hr class="my-3 opacity-25">
+
+        <!-- Resend OTP Section -->
+        {% if resend_count < max_resend %}
+        <form action="{{ url_for('auth_bp.resend_otp') }}" method="POST">
+            <p class="text-muted small mb-2">
+                Didn't receive the code?
+                <span class="text-danger fw-semibold">({{ resend_count }}/{{ max_resend }} resends used)</span>
+            </p>
+
+            {% if cooldown_left > 0 %}
+            <!-- Button disabled during cooldown - JavaScript ticks it down -->
+            <button type="submit" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold" disabled id="resendBtn">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Resend OTP <span class="badge bg-secondary ms-1" id="countdownBadge">{{ cooldown_left }}s</span>
+            </button>
+            <p class="text-muted small mt-2" id="cooldownMsg">Available in <strong id="countdownText">{{ cooldown_left }}</strong> seconds</p>
+            {% else %}
+            <button type="submit" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold" id="resendBtn">
+                <i class="bi bi-arrow-clockwise me-2"></i>Resend OTP
+            </button>
+            {% endif %}
+        </form>
+        {% else %}
+        <!-- Max resend attempts hit -->
+        <div class="alert alert-danger rounded-3 py-2 small mb-2">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+            Maximum resend attempts ({{ max_resend }}) reached.
+            <a href="{{ url_for('auth_bp.login') }}" class="alert-link fw-bold">Login again</a> to continue.
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('auth_bp.login') }}" class="text-decoration-none small text-muted d-block mt-3">
+            <i class="bi bi-arrow-left me-1"></i>Back to login
+        </a>
+    </div>
+</div>
+
+<script>
+// Live countdown timer handler
+(function () {
+    const countdownText   = document.getElementById('countdownText');
+    const countdownBadge  = document.getElementById('countdownBadge');
+    const resendBtn       = document.getElementById('resendBtn');
+    const cooldownMsg     = document.getElementById('cooldownMsg');
+    const expiryCountdown = document.getElementById('expiryCountdown');
+
+    // 1. Resend Cooldown Logic
+    if (countdownText) {
+        let resendSeconds = parseInt(countdownText.innerText, 10);
+        const resendTick = setInterval(() => {
+            resendSeconds -= 1;
+            if (resendSeconds <= 0) {
+                clearInterval(resendTick);
+                if (resendBtn) {
+                    resendBtn.disabled = false;
+                    resendBtn.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                    resendBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Resend OTP';
+                }
+                if (cooldownMsg) cooldownMsg.style.display = 'none';
+            } else {
+                if (countdownText)  countdownText.innerText  = resendSeconds;
+                if (countdownBadge) countdownBadge.innerText = resendSeconds + 's';
+            }
+        }, 1000);
+    }
+
+    // 2. OTP Expiry Logic
+    let expirySecs = {{ otp_expiry_left }};
+    const expiryTick = setInterval(() => {
+        expirySecs -= 1;
+        if (expirySecs <= 0) {
+            clearInterval(expiryTick);
+            if (expiryCountdown) {
+                expiryCountdown.innerText = "Expired";
+                expiryCountdown.classList.replace('text-danger', 'text-muted');
+            }
+            // Optionally disable the verify button or show a message
+        } else {
+            if (expiryCountdown) {
+                const mins = Math.floor(expirySecs / 60);
+                const secs = expirySecs % 60;
+                expiryCountdown.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+    }, 1000);
+})();
+
+// Auto-submit when 6 digits entered
+document.getElementById('otpInput').addEventListener('input', function () {
+    if (this.value.length === 6) {
+        this.closest('form').submit();
+    }
+});
+</script>
+{% endblock %}

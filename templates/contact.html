@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Contact Us - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row align-items-center bg-white rounded-4 shadow-sm overflow-hidden glass-card">
+        <div class="col-lg-6 p-5" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+            <h3 class="fw-bold mb-4">Get In Touch</h3>
+            <p class="opacity-75 mb-5">Have questions about the donation process, verifying a request, or joining our team? Feel free to reach out to us directly.</p>
+            
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-white bg-opacity-25 p-3 rounded-circle me-3">
+                    <i class="bi bi-geo-alt-fill fs-4 text-warning"></i>
+                </div>
+                <div>
+                    <h6 class="mb-1 fw-bold">Address</h6>
+                    <p class="mb-0 opacity-75 small text-light">Santhiram Engineering College (SREC)<br>Nandyal, Andhra Pradesh.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-white bg-opacity-25 p-3 rounded-circle me-3">
+                    <i class="bi bi-envelope-fill fs-4 text-warning"></i>
+                </div>
+                <div>
+                    <h6 class="mb-1 fw-bold">Email</h6>
+                    <p class="mb-0 opacity-75 small text-light fw-semibold">surendrasaantala@gmail.com</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center border-top border-white border-opacity-25 pt-4 mt-4">
+                <div class="bg-warning text-dark p-3 rounded-circle me-3 shadow-sm">
+                    <i class="bi bi-telephone-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-1 fw-bold text-warning">Emergency Support</h6>
+                    <p class="mb-0 fw-bold fs-5 text-white">+91 9014102239</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 p-5">
+            <h4 class="fw-bold text-dark mb-4">Send us a message</h4>
+            <form>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-semibold">Your Name</label>
+                    <input type="text" class="form-control bg-light">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted fw-semibold">Email Address</label>
+                    <input type="email" class="form-control bg-light">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label text-muted fw-semibold">Message</label>
+                    <textarea class="form-control bg-light" rows="4" style="resize:none;"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary-custom w-100 fw-bold shadow-sm">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

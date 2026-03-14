@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Resend Verification - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow-lg rounded-4 p-5" style="max-width: 500px; width: 100%;">
+        <div class="text-center mb-4">
+            <i class="bi bi-envelope-arrow-up-fill text-primary mb-3" style="font-size: 60px;"></i>
+            <h3 class="fw-bold text-dark mb-2">Resend Verification Email</h3>
+            <p class="text-muted">Enter your registered email and we'll resend the verification link.</p>
+        </div>
+        <form action="{{ url_for('auth_bp.resend_verification') }}" method="POST">
+            <div class="mb-4">
+                <label class="form-label fw-bold text-muted small">Email Address</label>
+                <input type="email" name="email" class="form-control bg-light" required placeholder="name@example.com">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm mb-3">
+                Resend Verification Email
+            </button>
+            <div class="text-center">
+                <a href="{{ url_for('auth_bp.login') }}" class="text-decoration-none small text-muted">
+                    <i class="bi bi-arrow-left"></i> Back to login
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Emergency Help - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <span class="badge bg-danger text-white px-3 py-2 rounded-pill mb-3 shadow-sm"><i class="bi bi-exclamation-triangle-fill me-1"></i> Emergency Assistance</span>
+                <h2 class="fw-bold text-dark section-title">Request Financial Help</h2>
+                <p class="text-muted lead">To maintain transparency and ensure funds reach those in genuine need, all requests require valid documentation and will be strictly verified.</p>
+            </div>
+
+            <div class="card border-0 shadow-lg glass-card" style="border-radius: 20px;">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-5">
+                    <div class="alert alert-warning border-0 rounded-3 shadow-sm d-flex align-items-center mb-0">
+                        <i class="bi bi-info-circle-fill fs-3 text-warning me-3"></i>
+                        <div>
+                            <strong>Verification Notice:</strong> Submitting false documents or fraudulent claims will result in immediate disciplinary action by the SREC management.
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-5 pt-4">
+                    <form action="{{ url_for('main_bp.emergency_help') }}" method="POST" enctype="multipart/form-data">
+                        
+                        <h5 class="fw-bold text-primary mb-4 border-bottom pb-2">Student Information</h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Full Name (as per college records)</label>
+                                <input type="text" class="form-control bg-light" name="student_name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Roll Number</label>
+                                <input type="text" class="form-control bg-light text-uppercase" name="roll_number" required placeholder="e.g., 23X51A0492">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Department</label>
+                                <select class="form-select bg-light" name="department" required>
+                                    <option value="" disabled selected>Select Department</option>
+                                    <option value="CSE">Computer Science and Engineering (CSE)</option>
+                                    <option value="ECE">Electronics and Communication Engineering (ECE)</option>
+                                    <option value="EEE">Electrical and Electronics Engineering (EEE)</option>
+                                    <option value="CIVIL">Civil Engineering</option>
+                                    <option value="MECH">Mechanical Engineering</option>
+                                    <option value="IT">Information Technology (IT)</option>
+                                    <option value="AI&DS">Artificial Intelligence and Data Science (AI&DS)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Phone Number</label>
+                                <input type="tel" class="form-control bg-light" name="phone" required>
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold text-primary mb-4 border-bottom pb-2 mt-5">Emergency Details</h5>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Problem Description</label>
+                            <textarea class="form-control bg-light" style="resize: none;" name="problem" rows="4" required placeholder="Please describe the emergency situation in detail..."></textarea>
+                        </div>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Estimated Amount Required (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 fw-bold">₹</span>
+                                    <input type="number" class="form-control border-start-0 ps-0 bg-light fw-bold text-danger" name="amount_required" required min="1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-danger"><i class="bi bi-file-earmark-medical me-1"></i>Upload Hospital Bill / Proof</label>
+                                <input class="form-control shadow-sm" type="file" name="hospital_bill" accept="image/*,.pdf" required>
+                                <div class="form-text text-muted small"><i class="bi bi-x-circle me-1"></i>Max size 5MB. Images or PDFs only.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-4 mt-4">
+                            <input class="form-check-input shadow-sm" type="checkbox" value="" id="invalidCheck" required>
+                            <label class="form-check-label text-muted small" for="invalidCheck">
+                                I confirm that the information and documents provided are genuine and accurate. I understand that the team will verify these details before approving the request.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold fs-5 shadow mt-2" style="background: linear-gradient(45deg, #ef4444, #dc2626); border: none;">
+                            <i class="bi bi-send-fill me-2"></i>Submit Request for Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

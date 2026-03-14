@@ -1,0 +1,57 @@
+<footer class="footer mt-auto py-5 custom-footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase fw-bold text-white mb-3 d-flex align-items-center">
+                    <i class="bi bi-shield-fill-check text-warning me-2"></i>
+                    Student Nation
+                </h5>
+                <p class="text-light opacity-75 pe-lg-4">
+                    Providing transparent emergency support for students. A platform to request financial help during emergencies and to donate using UPI.
+                </p>
+                <div class="mt-4">
+                    <h6 class="text-white mb-2">Santhiram Engineering College (SREC) (Autonomous)</h6>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-white mb-3 fw-semibold">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{{ url_for('main_bp.index') }}" class="text-light text-decoration-none hover-link">Home</a></li>
+                    <li class="mb-2"><a href="{{ url_for('main_bp.donate') }}" class="text-light text-decoration-none hover-link">Donate Now</a></li>
+                    <li class="mb-2"><a href="{{ url_for('main_bp.emergency_help') }}" class="text-light text-decoration-none hover-link">Request Help</a></li>
+                    <li class="mb-2"><a href="{{ url_for('main_bp.top_donors') }}" class="text-light text-decoration-none hover-link">Top Donors</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+                <h5 class="text-white mb-3 fw-semibold">Contact Us</h5>
+                <ul class="list-unstyled text-light opacity-75">
+                    <li class="mb-3 d-flex">
+                        <i class="bi bi-envelope-fill me-3 mt-1 text-warning"></i>
+                        <span><a href="mailto:surendrasaantala@gmail.com" class="text-light text-decoration-none hp-link">surendrasaantala@gmail.com</a></span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="bi bi-telephone-fill me-3 mt-1 text-warning"></i>
+                        <span>+91 9014102239</span>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="bi bi-geo-alt-fill me-3 mt-1 text-warning"></i>
+                        <span>Santhiram Engineering College (SREC) (Autonomous), Nandyal.</span>
+                    </li>
+                </ul>
+                <div class="d-flex mt-4 social-links">
+                    <a href="#" class="text-light me-3 fs-5"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-light me-3 fs-5"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="text-light me-3 fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-light fs-5"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="border-secondary my-4">
+        <div class="text-center text-light opacity-50 small">
+            &copy; {{ range(2023, 2030) | random }} Student Nation. Developed by Santala Surendra. All rights reserved.
+        </div>
+    </div>
+</footer>

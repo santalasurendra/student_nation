@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Login / Sign Up - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="card border-0 shadow-lg glass-card rounded-4 overflow-hidden" style="max-width: 900px; width: 100%;">
+        <div class="row g-0">
+            <!-- Left side with image -->
+            <div class="col-md-5 d-none d-md-block" style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color));">
+                <div class="h-100 p-5 d-flex flex-column justify-content-center text-white text-center">
+                    <i class="bi bi-shield-lock-fill align-self-center text-warning" style="font-size: 80px; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4));"></i>
+                    <h3 class="fw-bold mt-4 mb-3">Student Nation Portal</h3>
+                    <p class="opacity-75 mx-auto" style="max-width: 250px;">
+                        Secure role-based access for founders, administrators, and users to manage operations and impact lives.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Right side tabs & forms -->
+            <div class="col-md-7 p-4 p-lg-5 bg-white">
+                <ul class="nav nav-pills nav-justified mb-4" id="authTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold {% if active_tab != 'signup' %}active{% endif %}" id="signin-tab" data-bs-toggle="pill" data-bs-target="#signin" type="button" role="tab" aria-selected="true">Sign In</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-bold {% if active_tab == 'signup' %}active{% endif %}" id="signup-tab" data-bs-toggle="pill" data-bs-target="#signup" type="button" role="tab" aria-selected="false">Sign Up</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="authTabsContent">
+                    <!-- SIGN IN TAB -->
+                    <div class="tab-pane fade {% if active_tab != 'signup' %}show active{% endif %}" id="signin" role="tabpanel">
+                        <form action="{{ url_for('auth_bp.login') }}" method="POST">
+                            <input type="hidden" name="action" value="login">
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted">Login Role</label>
+                                <select name="role" class="form-select bg-light" required>
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Founder">Founder</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-secondary"></i></span>
+                                    <input type="email" name="email" class="form-control bg-light border-start-0 ps-0" required placeholder="name@example.com">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-key text-secondary"></i></span>
+                                    <input type="password" name="password" class="form-control bg-light border-start-0 ps-0" required placeholder="••••••••">
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mb-4">
+                                <a href="{{ url_for('auth_bp.resend_verification') }}" class="text-decoration-none small fw-semibold text-secondary">Resend Verification Email</a>
+                                <a href="{{ url_for('auth_bp.forgot_password') }}" class="text-decoration-none small fw-semibold text-primary">Forgot password?</a>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold fs-5 shadow-sm mb-3" style="background: linear-gradient(45deg, #0ea5e9, #3b82f6); border: none;">
+                                Sign In
+                            </button>
+                            <!-- Fake Google Auth Button for demonstration -->
+                            <a href="#" class="btn btn-outline-dark w-100 py-3 rounded-pill fw-bold fs-5 shadow-sm">
+                                <i class="bi bi-google text-danger me-2"></i> Continue with Google
+                            </a>
+                        </form>
+                    </div>
+
+                    <!-- SIGN UP TAB -->
+                    <div class="tab-pane fade {% if active_tab == 'signup' %}show active{% endif %}" id="signup" role="tabpanel">
+                        <form action="{{ url_for('auth_bp.login') }}" method="POST">
+                            <input type="hidden" name="action" value="register">
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-secondary"></i></span>
+                                    <input type="text" name="name" class="form-control bg-light border-start-0 ps-0" required placeholder="John Doe">
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold text-muted">Role</label>
+                                    <select name="role" class="form-select bg-light" required>
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold text-muted">Phone Number</label>
+                                    <input type="text" name="phone" class="form-control bg-light" required placeholder="9876543210">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-secondary"></i></span>
+                                    <input type="email" name="email" class="form-control bg-light border-start-0 ps-0" required placeholder="name@example.com">
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-4">
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold text-muted">Password</label>
+                                    <input type="password" name="password" class="form-control bg-light" required placeholder="••••••••">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold text-muted">Confirm Password</label>
+                                    <input type="password" name="confirm_password" class="form-control bg-light" required placeholder="••••••••">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 py-3 rounded-pill fw-bold fs-5 shadow-sm" style="background: linear-gradient(45deg, #10b981, #059669); border: none;">
+                                Create Account
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

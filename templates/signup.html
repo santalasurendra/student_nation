@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Sign Up - Student Nation{% endblock %}
+
+{% block content %}
+<script>
+    // Redirecting to the Login page with the signup tab automatically activated
+    window.location.href = "{{ url_for('auth_bp.login', tab='signup') }}";
+</script>
+<div class="container text-center py-5" style="min-height: 50vh;">
+    <h3 class="text-muted">Redirecting to Registration...</h3>
+</div>
+{% endblock %}

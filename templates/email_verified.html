@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Email Verified - Student Nation{% endblock %}
+
+{% block content %}
+<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: 50vh;">
+    <div class="card border-0 shadow-sm rounded-4 p-5 text-center" style="max-width: 500px; width: 100%;">
+        <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 60px;"></i>
+        <h3 class="fw-bold text-dark mb-3">Email Verified Successfully!</h3>
+        <p class="text-muted mb-4">Your account is now fully active. You may log in to access your platform features securely.</p>
+        <a href="{{ url_for('auth_bp.login') }}" class="btn btn-success px-5 py-3 rounded-pill fw-bold shadow-sm">
+            Go to Login
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% block title %}Student Nation - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center text-lg-start">
+    <div class="container relative z-index-1">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fw-bold">SANTHIRAM ENGINEERING
+                    COLLEGE (AUTONOMOUS)</span>
+                <h1 class="hero-title">STUDENT NATION</h1>
+                <p class="hero-subtitle lead">Helping Students in Emergency Situations. A transparent platform to
+                    support our peers when they need it the most through direct UPI donations.</p>
+
+                <div class="d-flex flex-wrap gap-3 mt-4 justify-content-center justify-content-lg-start">
+                    <a href="{{ url_for('main_bp.donate') }}" class="btn btn-primary-custom btn-lg"><i
+                            class="bi bi-heart-fill me-2"></i>Donate Now</a>
+                    <a href="{{ url_for('main_bp.emergency_help') }}" class="btn btn-secondary-custom btn-lg"><i
+                            class="bi bi-life-preserver me-2"></i>Request Emergency Help</a>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="glass-card p-4 text-center text-dark">
+                    <h3 class="fw-bold mb-3 text-primary"><i class="bi bi-graph-up-arrow me-2"></i>Live Impact</h3>
+                    <div class="mb-4">
+                        <p class="text-muted mb-1 fw-semibold text-uppercase small">Total Donations</p>
+                        <h2 class="display-5 fw-bold text-success counter-value" data-target="{{ total_donations }}">₹0</h2>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="bg-light p-3 rounded-3 shadow-sm border border-white">
+                                <h4 class="fw-bold text-dark mb-0 counter-value" data-target="{{ students_helped }}">0</h4>
+                                <span class="small text-muted">Students Helped</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light p-3 rounded-3 shadow-sm border border-white">
+                                <h4 class="fw-bold text-dark mb-0 counter-value" data-target="{{ active_donors }}">0</h4>
+                                <span class="small text-muted">Active Donors</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mobile Stats (visible only on small screens) -->
+<section class="d-lg-none mt-5 pt-4">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="stat-card">
+                    <i class="bi bi-cash-stack stat-card-icon"></i>
+                    <p class="text-muted mb-1 fw-semibold text-uppercase small">Total Donations</p>
+                    <div class="stat-card-value text-success counter-value" data-target="{{ total_donations }}">₹0</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-card p-3">
+                    <h4 class="fw-bold text-dark mb-0 fs-2 counter-value" data-target="{{ students_helped }}">0</h4>
+                    <span class="small text-muted">Students Helped</span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-card p-3">
+                    <h4 class="fw-bold text-dark mb-0 fs-2 counter-value" data-target="{{ active_donors }}">0</h4>
+                    <span class="small text-muted">Active Donors</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Emergency Cases -->
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title text-center">Emergency Cases</h2>
+            <p class="text-muted mb-5">Students who urgently need financial assistance.</p>
+        </div>
+
+        {% if approved_cases %}
+        <div class="row g-4">
+            {% for case in approved_cases %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm glass-card">
+                    <div class="card-header bg-danger text-white py-3 border-0 rounded-top"
+                        style="background: linear-gradient(45deg, #ef4444, #dc2626);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-white text-danger fw-bold rounded-pill">Urgent</span>
+                            <small><i class="bi bi-clock me-1"></i>{{ case.date_requested.strftime('%b %d, %Y')
+                                }}</small>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold">{{ case.student_name }}</h5>
+                        <p class="text-primary small fw-semibold mb-3"><i class="bi bi-mortarboard-fill me-1"></i>{{
+                            case.department }} Dept.</p>
+
+                        <p class="card-text text-muted mb-4"
+                            style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                            {{ case.problem }}
+                        </p>
+
+                        <div class="bg-light p-3 rounded-3 mb-4 border border-white">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small fw-semibold">Goal: ₹{{ case.amount_required }}</span>
+                                <span class="fw-bold text-success">₹{{ case.amount_received or 0 }} Raised</span>
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 10px;">
+                                {% set percent = ((case.amount_received or 0) / case.amount_required * 100) if case.amount_required else 0 %}
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ percent }}%;" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+
+                        <a href="{{ url_for('main_bp.donate') }}"
+                            class="btn btn-primary w-100 rounded-pill fw-semibold py-2"
+                            style="background: linear-gradient(45deg, #0ea5e9, #3b82f6); border: none;">Donate to
+                            Help</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm">
+            <i class="bi bi-emoji-smile fs-1 text-success mb-3 d-block"></i>
+            <h4 class="fw-bold">No Active Emergencies</h4>
+            <p class="text-muted">Fortunately, there are no approved emergency requests at the moment.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Top Donors Preview -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Our Top Angels</h2>
+            <p class="text-muted mb-5">The generous hearts supporting our SREC community.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for donor in top_donors %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm text-center p-4 h-100 glass-card"
+                    style="background: linear-gradient(to bottom, #ffffff, #f8fafc);">
+                    <div class="mb-3">
+                        {% if loop.index == 1 %}
+                        <i class="bi bi-trophy-fill fs-1" style="color: #fbbf24;"></i>
+                        {% elif loop.index == 2 %}
+                        <i class="bi bi-trophy-fill fs-1" style="color: #94a3b8;"></i>
+                        {% elif loop.index == 3 %}
+                        <i class="bi bi-trophy-fill fs-1" style="color: #b45309;"></i>
+                        {% else %}
+                        <i class="bi bi-person-heart fs-1 text-primary"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="fw-bold mb-1">{{ donor.donor_name }}</h5>
+                    <p class="text-success fs-4 fw-bold mb-0">₹{{ donor.amount }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-5">
+            <a href="{{ url_for('main_bp.top_donors') }}"
+                class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold">View All Donors</a>
+        </div>
+    </div>
+</section>
+
+<!-- Founder Section -->
+<section class="py-5" style="background-color: var(--primary-color);">
+    <div class="container text-center bg-white rounded-4 shadow-lg py-5 glass-card"
+        style="max-width: 800px; margin: 0 auto;">
+
+        <h2 class="mb-4 fw-bold section-title">Founder of Student Nation</h2>
+
+        <img src="{{ url_for('static', filename='images/founder/surendra.jpg') }}" class="rounded-circle shadow mb-4"
+            style="width:200px;height:200px;object-fit:cover; border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;"
+            onerror="this.src='https://ui-avatars.com/api/?name=Santala+Surendra&background=0D8ABC&color=fff&size=200'">
+
+        <h3 class="fw-bold text-dark mb-3">SANTALA SURENDRA</h3>
+
+        <div class="fs-5 text-muted mx-auto" style="max-width: 600px;">
+            <p class="mb-2"><b class="text-dark">Roll Number:</b> 23X51A0492</p>
+
+            <p class="mb-2"><b class="text-dark">Department:</b> Electronics and Communication Engineering</p>
+
+            <p class="mb-2"><b class="text-dark">College:</b> Santhiram Engineering College (SREC) (Autonomous)</p>
+
+            <p class="mb-2"><b class="text-dark">Contact:</b> 9014102239</p>
+
+            <p class="mb-4"><b class="text-dark">Email:</b> surendrasaantala@gmail.com</p>
+        </div>
+
+        <span class="badge bg-primary rounded-pill px-4 py-2 fs-6 shadow-sm">Founder</span>
+
+    </div>
+</section>
+
+<!-- Meet Our Team -->
+<section class="py-5" style="background-color: #f1f5f9;">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Meet Our Team</h2>
+            <p class="text-muted mb-5">The dedicated individuals working tirelessly behind the scenes.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for member in team_members %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card border-0 shadow-sm text-center h-100 glass-card pt-4">
+                    <div class="mx-auto mb-3">
+                        {% if member.image %}
+                        <img src="{{ url_for('static', filename='uploads/team_images/' + member.image) }}"
+                            alt="{{ member.name }}" class="team-img" style="width: 120px; height: 120px;">
+                        {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ member.name }}&background=EBF4FF&color=3B82F6&size=120"
+                            alt="{{ member.name }}" class="team-img" style="width: 120px; height: 120px;">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-1">{{ member.name }}</h5>
+                        <div class="text-primary fw-semibold small mb-2">{{ member.role }}</div>
+                        <p class="text-muted small mb-0"><i class="bi bi-building me-1"></i>{{ member.department }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll(".counter-value");
+    const speed = 200; // The lower the slower
+
+    const animateCounters = () => {
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const targetText = counter.getAttribute("data-target");
+                if (!targetText) return;
+                const target = +targetText.replace(/,/g, '');
+                
+                // Remove commas to do math, then add back
+                let currentText = counter.innerText.replace(/,/g, '');
+                // Handle ₹ symbol
+                const hasRupee = currentText.includes('₹');
+                if(hasRupee) currentText = currentText.replace('₹', '');
+                
+                const count = +currentText;
+
+                // Lower inc to slow and higher to speed up
+                const inc = target / speed;
+
+                if (count < target) {
+                    // Add commmas and ₹ back for display
+                    let nextValue = Math.ceil(count + inc);
+                    if(hasRupee) {
+                        counter.innerText = '₹' + nextValue.toLocaleString();
+                    } else {
+                        counter.innerText = nextValue.toLocaleString();
+                    }
+                    setTimeout(updateCount, 15);
+                } else {
+                    if(hasRupee) {
+                        counter.innerText = '₹' + target.toLocaleString();
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                }
+            };
+            
+            // Intersection Observer to start animation when visible
+            const observer = new IntersectionObserver((entries) => {
+                if(entries[0].isIntersecting) {
+                    updateCount();
+                    observer.disconnect(); // Run only once
+                }
+            });
+            observer.observe(counter);
+        });
+    };
+    
+    animateCounters();
+});
+</script>
+{% endblock %}
