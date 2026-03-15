@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
-from flask_login import login_required
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, abort
+from flask_login import login_required, current_user
 from datetime import datetime
 from models.team_model import TeamMember
 from models.user_model import User, LoginLog
@@ -24,15 +24,24 @@ def dashboard():
     active_donors    = Donation.query.count()
     locked_accounts  = User.query.filter_by(is_locked=True).count()
     recent_logs      = LoginLog.query.order_by(LoginLog.timestamp.desc()).limit(10).all()
+    
+    total_users = User.query.count()
+    total_requests = EmergencyRequest.query.count()
+    donations = Donation.query.all()
 
+    # Use the new premium template if it exists, otherwise fallback
     return render_template(
-        "admin/founder_dashboard.html",
+        "founder/dashboard.html",
         total_donations=total_donations,
         students_helped=students_helped,
         pending_requests=pending_requests,
         active_donors=active_donors,
         locked_accounts=locked_accounts,
         recent_logs=recent_logs,
+        total_users=total_users,
+        total_requests=total_requests,
+        total_amount=total_donations,
+        donations=donations
     )
 
 # ─── Security Logs ────────────────────────────────────────────────────────────
@@ -135,25 +144,3 @@ def remove_member(member_id):
     db.session.commit()
     flash(f"Team member {member.name} removed successfully.", "success")
     return redirect(url_for('founder_bp.team_management'))
-@founder_bp.route('/dashboard')
-@login_required
-def dashboard():
-    if current_user.role != "Founder":
-        abort(403)
-
-    total_users = User.query.count()
-    total_requests = EmergencyRequest.query.count()
-    total_donations = Donation.query.count()
-
-    total_amount = db.session.query(db.func.sum(Donation.amount)).scalar() or 0
-
-    donations = Donation.query.all()
-
-    return render_template(
-        "founder/dashboard.html",
-        total_users=total_users,
-        total_requests=total_requests,
-        total_donations=total_donations,
-        total_amount=total_amount,
-        donations=donations
-    )

@@ -11,4 +11,5 @@ instance/
 .coverage
 htmlcov/
 database/database.db
+student_nation.db
 static/uploads/
