@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Founder Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <h1>Founder Dashboard</h1>
+
+    <div>
+        <h3>Total Users: {{ total_users }}</h3>
+        <h3>Total Requests: {{ total_requests }}</h3>
+        <h3>Total Donations: {{ total_donations }}</h3>
+        <h3>Total Amount Raised: ₹{{ total_amount }}</h3>
+    </div>
+
+    <canvas id="donationChart"></canvas>
+
+    <script>
+        const ctx = document.getElementById('donationChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for d in donations %}"{{ d.donor_name }}",{% endfor %}],
+            datasets: [{
+                label: 'Donation Amount',
+                data: [{% for d in donations %}{{ d.amount }}, {% endfor %}]
+}]
+}
+});
+    </script>
+
+</body>
+
+</html>
