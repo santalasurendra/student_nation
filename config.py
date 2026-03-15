@@ -1,5 +1,4 @@
-MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
-MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")import os
+import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'santhiram_engineering_college_srec_secret_key'
