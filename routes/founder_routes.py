@@ -135,3 +135,25 @@ def remove_member(member_id):
     db.session.commit()
     flash(f"Team member {member.name} removed successfully.", "success")
     return redirect(url_for('founder_bp.team_management'))
+@founder_bp.route('/dashboard')
+@login_required
+def dashboard():
+    if current_user.role != "Founder":
+        abort(403)
+
+    total_users = User.query.count()
+    total_requests = EmergencyRequest.query.count()
+    total_donations = Donation.query.count()
+
+    total_amount = db.session.query(db.func.sum(Donation.amount)).scalar() or 0
+
+    donations = Donation.query.all()
+
+    return render_template(
+        "founder/dashboard.html",
+        total_users=total_users,
+        total_requests=total_requests,
+        total_donations=total_donations,
+        total_amount=total_amount,
+        donations=donations
+    )
