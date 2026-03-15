@@ -1,4 +1,5 @@
-import os
+MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'santhiram_engineering_college_srec_secret_key'
@@ -16,8 +17,8 @@ class Config:
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = "surendrasaantala@gmail.com"
-    MAIL_PASSWORD = "aqyw lqpi tftn aiig"
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = "surendrasaantala@gmail.com"
 
     # Base URL for email links
