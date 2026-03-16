@@ -13,6 +13,9 @@ class Config:
 
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_USERNAME")
+
+    # Base URL for email links
+    # Change to your public domain when deployed
     BASE_URL = os.environ.get("BASE_URL") or "https://student-nation.onrender.com"
+
