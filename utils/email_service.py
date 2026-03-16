@@ -60,9 +60,10 @@ def send_email(to_email, subject, body):
             body=body
         )
         mail.send(msg)
+        print("Email sent successfully")
         return True
     except Exception as e:
-        print(f"[EMAIL ERROR] Failed to send email to {to_email}: {e}")
+        print("EMAIL ERROR:", e)
         return False
 
 def send_verification_email(user_email):
@@ -70,7 +71,7 @@ def send_verification_email(user_email):
     
     # Use url_for as requested to generate the full link
     # This will use the domain/IP from the request context
-    verify_url = url_for('auth_bp.verify_email', token=token, _external=True)
+    verify_url = current_app.config["BASE_URL"] + url_for('auth_bp.verify_email', token=token)
     subject = "Verify Your Email - STUDENT NATION"
     body = f"""Hello,
 
@@ -111,7 +112,7 @@ def send_password_reset_email(user_email):
     token = generate_reset_token(user_email)
     
     # Use url_for for reset links as well
-    reset_url = url_for('auth_bp.reset_password', token=token, _external=True)
+    reset_url = current_app.config["BASE_URL"] + url_for('auth_bp.reset_password', token=token)
     
     subject = "Password Reset Request - STUDENT NATION"
     body = f"""Hello,

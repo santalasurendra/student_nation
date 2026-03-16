@@ -1,25 +1,18 @@
 import os
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'santhiram_engineering_college_srec_secret_key'
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'student_nation.db')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
-    # Upload folders
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
-    TEAM_IMAGES_FOLDER = os.path.join(UPLOAD_FOLDER, 'team_images')
-    HOSPITAL_BILLS_FOLDER = os.path.join(UPLOAD_FOLDER, 'hospital_bills')
-    PAYMENT_SCREENSHOTS_FOLDER = os.path.join(UPLOAD_FOLDER, 'payment_screenshots')
+    SECRET_KEY = os.environ.get("SECRET_KEY", "studentnationsecret")
 
-    # Flask-Mail (Gmail SMTP)
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///site.db")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = "surendrasaantala@gmail.com"
 
-    # Base URL for email links
-    # Change to your public domain when deployed
-    BASE_URL = os.environ.get('BASE_URL') or "https://student-nation.onrender.com"
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_USERNAME")
+    BASE_URL = os.environ.get("BASE_URL") or "https://student-nation.onrender.com"
