@@ -48,6 +48,11 @@ def create_initial_founder():
             print("Founder account created. email: surendrasaantala@gmail.com password: founder123")
 
 # Database initialization (required for first-time setup on Render)
-create_initial_founder()
+# Running this inside app.app_context() ensures it doesn't cause overhead on every request
+with app.app_context():
+    db.create_all()
+    create_initial_founder()
+
 if __name__ == '__main__':
+    # host='0.0.0.0' allows other devices on the same WiFi to access the server
     app.run(host='0.0.0.0', port=5000)
