@@ -7,3 +7,4 @@ Werkzeug
 itsdangerous
 pyotp
 gunicorn
+psycopg2-binary

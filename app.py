@@ -48,8 +48,15 @@ def create_initial_founder():
             print("Founder account created. email: surendrasaantala@gmail.com password: founder123")
 
 # Database initialization (required for first-time setup on Render)
-# Running this inside app.app_context() ensures it doesn't cause overhead on every request
 with app.app_context():
+    # Ensure upload folders exist
+    for folder in [app.config['PAYMENT_SCREENSHOTS_FOLDER'], 
+                  app.config['HOSPITAL_BILLS_FOLDER'], 
+                  app.config['TEAM_IMAGES_FOLDER']]:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+            print(f"Created folder: {folder}")
+            
     db.create_all()
     create_initial_founder()
 

@@ -16,6 +16,11 @@ class Config:
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_USERNAME")
 
     # Base URL for email links
-    # Change to your public domain when deployed
-    BASE_URL = os.environ.get("BASE_URL") or "https://student-nation.onrender.com"
+    BASE_URL = os.environ.get("BASE_URL", "https://student-nation.onrender.com")
+
+    # Upload folders
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/uploads')
+    PAYMENT_SCREENSHOTS_FOLDER = os.path.join(UPLOAD_FOLDER, 'donations')
+    HOSPITAL_BILLS_FOLDER = os.path.join(UPLOAD_FOLDER, 'emergency_requests')
+    TEAM_IMAGES_FOLDER = os.path.join(UPLOAD_FOLDER, 'team_images')
 
