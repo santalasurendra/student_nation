@@ -3,4 +3,4 @@ services:
     name: student-nation
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
+    startCommand: "python init_db.py && gunicorn app:app --timeout 120"

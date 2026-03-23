@@ -35,30 +35,11 @@ app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(founder_bp, url_prefix='/founder')
 
-def create_initial_founder():
-    with app.app_context():
-        db.create_all()
-        founder_email = 'surendrasaantala@gmail.com'
-        founder = User.query.filter_by(email=founder_email).first()
-        if not founder:
-            hashed_pw = bcrypt.generate_password_hash('founder123').decode('utf-8')
-            founder = User(name='SANTALA SURENDRA', email=founder_email, password=hashed_pw, role='Founder', email_verified=True)
-            db.session.add(founder)
-            db.session.commit()
-            print("Founder account created. email: surendrasaantala@gmail.com password: founder123")
-
-# Database initialization (required for first-time setup on Render)
+# Note: Database initialization is now handled in init_db.py.
+# This prevents timeouts and race conditions on Render.
 with app.app_context():
-    # Ensure upload folders exist
-    for folder in [app.config['PAYMENT_SCREENSHOTS_FOLDER'], 
-                  app.config['HOSPITAL_BILLS_FOLDER'], 
-                  app.config['TEAM_IMAGES_FOLDER']]:
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-            print(f"Created folder: {folder}")
-            
     db.create_all()
-    create_initial_founder()
+
 
 if __name__ == '__main__':
     # host='0.0.0.0' allows other devices on the same WiFi to access the server

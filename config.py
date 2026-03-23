@@ -16,7 +16,7 @@ class Config:
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_USERNAME")
 
     # Base URL for email links
-    BASE_URL = os.environ.get("BASE_URL", "https://student-nation.onrender.com")
+    BASE_URL = os.environ.get("BASE_URL", "https://student-nation-2o71.onrender.com")
 
     # Upload folders
     UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/uploads')
