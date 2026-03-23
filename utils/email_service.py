@@ -57,10 +57,11 @@ def send_email(to_email, subject, body):
         msg = Message(
             subject=subject,
             recipients=[to_email],
-            body=body
+            body=body,
+            sender=current_app.config.get('MAIL_DEFAULT_SENDER')
         )
         mail.send(msg)
-        print("Email sent successfully")
+        print(f"Email sent successfully to {to_email}")
         return True
     except Exception as e:
         print("EMAIL ERROR:", e)

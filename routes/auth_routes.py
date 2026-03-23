@@ -132,11 +132,17 @@ def login():
 
             otp = generate_otp(user.otp_secret)
             
+            # Send OTP email and check for success
+            sent = send_otp_email(email, otp)
+            if not sent:
+                _log(email, 'failed', 'SMTP Error: Failed to send OTP email')
+                flash('⚠️ Error: We could not send the verification code to your email. Please check your internet connection or contact the administrator.', 'danger')
+                return redirect(url_for('auth_bp.login'))
+
             # Store OTP and expiry in session for verification
             session['otp_code']   = str(otp)
             session['otp_expiry'] = time.time() + 300  # 5 minutes valid
 
-            send_otp_email(email, otp)
             _log(email, 'otp_sent', 'OTP sent — awaiting 2FA verification')
 
             session['pending_user_id']  = user.id
