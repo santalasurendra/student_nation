@@ -300,4 +300,7 @@ h6 {
     width: 50px;
     height: 50px;
     object-fit: contain;
+    background-color: white; /* Remove transparent effect by adding background */
+    border-radius: 50%; /* Keep it in a perfect circle */
+    padding: 2px; /* Slight padding to let the logo breathe */
 }
