@@ -2,6 +2,7 @@ import pyotp
 from flask import current_app, url_for
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from threading import Thread
 
 # ─── OTP ────────────────────────────────────────────────────────────────────
 
@@ -49,10 +50,19 @@ def verify_reset_token(token, expiration=600):  # 10 minutes
     except BadSignature:
         return None, 'invalid'
 
-# ─── Real Email Sending via Flask-Mail ────────────────────────────────────────
+# ─── Async Email Sending ──────────────────────────────────────────────────────
+
+def send_async_email(app, msg):
+    from app import mail
+    with app.app_context():
+        try:
+            mail.send(msg)
+            print(f"Async email sent successfully to {msg.recipients}")
+        except Exception as e:
+            print("ASYNC EMAIL ERROR:", e)
 
 def send_email(to_email, subject, body):
-    from app import mail
+    from app import app
     try:
         msg = Message(
             subject=subject,
@@ -60,18 +70,15 @@ def send_email(to_email, subject, body):
             body=body,
             sender=current_app.config.get('MAIL_DEFAULT_SENDER')
         )
-        mail.send(msg)
-        print(f"Email sent successfully to {to_email}")
+        # Run the email sending in a background thread
+        Thread(target=send_async_email, args=(app, msg)).start()
         return True
     except Exception as e:
-        print("EMAIL ERROR:", e)
+        print("EMAIL PREPARATION ERROR:", e)
         return False
 
 def send_verification_email(user_email):
     token = generate_verification_token(user_email)
-    
-    # Use url_for as requested to generate the full link
-    # This will use the domain/IP from the request context
     verify_url = current_app.config["BASE_URL"] + url_for('auth_bp.verify_email', token=token)
     subject = "Verify Your Email - STUDENT NATION"
     body = f"""Hello,
@@ -111,8 +118,6 @@ If you did not attempt to login, please change your password immediately.
 
 def send_password_reset_email(user_email):
     token = generate_reset_token(user_email)
-    
-    # Use url_for for reset links as well
     reset_url = current_app.config["BASE_URL"] + url_for('auth_bp.reset_password', token=token)
     
     subject = "Password Reset Request - STUDENT NATION"

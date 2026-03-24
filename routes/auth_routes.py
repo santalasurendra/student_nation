@@ -36,11 +36,15 @@ def login():
         if action == 'register':
             from app import bcrypt
             name     = request.form.get('name')
-            email    = request.form.get('email')
+            email    = request.form.get('email', '').strip().lower()
             phone    = request.form.get('phone')
             password = request.form.get('password')
             confirm  = request.form.get('confirm_password')
             role     = request.form.get('role')
+
+            if not email:
+                flash('Email is required.', 'danger')
+                return redirect(url_for('auth_bp.login', tab='signup'))
 
             if role == 'Founder':
                 flash('Founder role cannot be created through signup.', 'danger')
@@ -64,17 +68,21 @@ def login():
 
             sent = send_verification_email(email)
             if sent:
-                flash('Account created! A verification link has been sent to your email.', 'success')
+                flash('Account created successfully! A verification link has been sent to your email address.', 'success')
             else:
-                flash('Account created, but we could not send the verification email. Contact support.', 'warning')
+                flash('Account created, but we could not send the verification email. Please contact support.', 'warning')
             return redirect(url_for('auth_bp.login', tab='login'))
 
         # ── SIGN IN ──────────────────────────────────────────────────────────
         elif action == 'login':
             from app import bcrypt
-            email    = request.form.get('email')
+            email    = request.form.get('email', '').strip().lower()
             password = request.form.get('password')
             role     = request.form.get('role')
+
+            if not email:
+                flash('Please enter your email address.', 'danger')
+                return redirect(url_for('auth_bp.login'))
 
             user = User.query.filter_by(email=email).first()
 
@@ -148,7 +156,7 @@ def login():
             session['pending_user_id']  = user.id
             session['otp_last_sent']    = time.time()
             session['otp_resend_count'] = 0
-            flash('An OTP has been sent to your email. Please verify to continue.', 'info')
+            flash('A verification code has been sent to your email. Please check your inbox and verify to continue.', 'info')
             return redirect(url_for('auth_bp.otp_verification'))
 
     active_tab = request.args.get('tab', 'login')
